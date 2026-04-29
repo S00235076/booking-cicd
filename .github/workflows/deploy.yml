@@ -23,8 +23,8 @@ jobs:
         role-to-assume: arn:aws:iam::730335532173:role/GitHubActionsLambdaDeployRole
         aws-region: eu-west-1
 
-    - name: Zip Lambda
-      run: zip function.zip lambda_function.py
+   - name: Zip Lambda
+  run: zip -r function.zip .
 
     - name: Deploy Lambda
       run: |
