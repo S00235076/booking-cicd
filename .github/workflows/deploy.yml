@@ -1,0 +1,33 @@
+name: Deploy Lambda
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::YOUR_ACCOUNT_ID:role/GitHubActionsLambdaDeployRole
+        aws-region: eu-west-1
+
+    - name: Zip Lambda
+      run: zip function.zip lambda_function.py
+
+    - name: Deploy Lambda
+      run: |
+        aws lambda update-function-code \
+          --function-name StartBooking \
+          --zip-file fileb://function.zip
